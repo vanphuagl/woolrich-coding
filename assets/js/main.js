@@ -1,13 +1,14 @@
 "use strict";
 
 // ===== globals =====
-const isMobile = window.matchMedia("(max-width: 1024px)");
+let mm = gsap.matchMedia();
+const mw = 1024;
+const isMobile = window.matchMedia(`(max-width: ${mw}px)`);
 const eventsTrigger = ["pageshow", "scroll"];
 
 // ===== init =====
 const init = () => {
   // # gsap
-  gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.clearScrollMemory("manual");
   ScrollTrigger.refresh();
   // # app height
@@ -32,14 +33,11 @@ const lenis = new Lenis({
   direction: "vertical",
   gestureDirection: "vertical",
 });
-const raf = (t) => {
-  lenis.raf(t);
-  requestAnimationFrame(raf);
-};
-requestAnimationFrame(raf);
-lenis.on("scroll", () => {
-  ScrollTrigger.update();
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
 });
+gsap.ticker.lagSmoothing(0);
+lenis.on("scroll", ScrollTrigger.update);
 
 // ===== app height =====
 const appHeight = () => {
@@ -59,40 +57,65 @@ window.addEventListener("resize", appHeight);
 // ===== scroll trigger =====
 gsap.registerPlugin(ScrollTrigger);
 
-// # change bg
-const defaultColor = getComputedStyle(document.body).backgroundColor;
-document.querySelectorAll("[data-bg]").forEach((panel) => {
-  let color = panel.dataset.bg;
-  ScrollTrigger.create({
-    trigger: panel,
-    start: "top top",
-    markers: false,
-    onEnter: () =>
-      gsap.to("body", {
-        duration: 0.3,
-        ease: "power1.inOut",
-        backgroundColor: color,
-      }),
-    onLeaveBack: () =>
-      gsap.to("body", {
-        duration: 0.3,
-        ease: "power1.inOut",
-        backgroundColor: defaultColor,
-      }),
+const initGsap = () => {
+  // # change bg
+  const defaultColor = getComputedStyle(document.body).backgroundColor;
+  document.querySelectorAll("[data-bg]").forEach((panel) => {
+    let color = panel.dataset.bg;
+    ScrollTrigger.create({
+      trigger: panel,
+      start: "top top",
+      end: "bottom top",
+      markers: false,
+      onEnter: () =>
+        gsap.to("body", {
+          duration: 0.3,
+          ease: "power1.inOut",
+          backgroundColor: color,
+        }),
+      onLeaveBack: () =>
+        gsap.to("body", {
+          duration: 0.3,
+          ease: "power1.inOut",
+          backgroundColor: defaultColor,
+        }),
+    });
   });
-});
 
-// # hide tree
-gsap.to("[data-fv-tree]", {
-  autoAlpha: 0,
-  duration: 0.3,
-  ease: "sine.inOut",
-  scrollTrigger: {
-    trigger: "[data-diary]",
-    start: "top bottom",
-    markers: false,
-    toggleActions: "play reverse play reverse",
-  },
+  // # hide tree
+  mm.add(`(max-width: ${mw}px)`, () => {
+    gsap.to("[data-fv-tree]", {
+      autoAlpha: 0,
+      duration: 0.3,
+      ease: "sine.inOut",
+      scrollTrigger: {
+        trigger: "[data-diary]",
+        start: "top bottom",
+        end: "bottom top",
+        markers: false,
+        toggleActions: "play none none reverse",
+      },
+    });
+  });
+
+  // refactor refresh
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
+};
+
+// # reset trigger when resize
+let resizeTimeout;
+const optimizedResize = () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    requestAnimationFrame(initGsap);
+  }, 200);
+};
+
+const resizeObserver = new ResizeObserver(optimizedResize);
+resizeObserver.observe(document.documentElement, {
+  box: "content-box",
 });
 
 // ### ===== DOMCONTENTLOADED ===== ###

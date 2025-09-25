@@ -9,12 +9,12 @@
   padding-bottom: 100%;
   background: transparent;
   overflow: hidden;
+  mix-blend-mode: multiply;
 
   img {
     position: absolute;
     top: 0;
     left: 0;
     object-fit: contain;
-    mix-blend-mode: multiply;
   }
 }

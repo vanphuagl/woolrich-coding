@@ -1,5 +1,14 @@
 /* Utils
 ------------------------------------------------------------*/
+/* padding */
+.u-pad {
+  padding: 0 var(--p);
+
+  @include maxW {
+    padding: 0 var(--p-sp);
+  }
+}
+
 /* font family */
 .montserrat-medium {
   font-family: var(--en-fonts);
