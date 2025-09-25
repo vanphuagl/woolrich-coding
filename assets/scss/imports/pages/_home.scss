@@ -3,8 +3,166 @@
 /* -------------------------------------------------------------------------- */
 
 .homepage {
-    // ===== fv ====
-    .fv {
-        height: 300vh;
+  // ===== fv ====
+  .fv {
+    &_container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
     }
+
+    &_content {
+      &_title {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        mix-blend-mode: multiply;
+
+        & > div {
+          width: 80.972%;
+          position: absolute;
+          top: 48%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        picture {
+          padding-bottom: calc(531.34 / 583 * 100%);
+        }
+      }
+
+      &_desc {
+        margin: 130px auto 0;
+        padding: 0 var(--p-sp);
+
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 3.12;
+        text-align: center;
+      }
+    }
+
+    &_fixed {
+      position: sticky;
+      top: 0;
+      height: var(--app-height);
+      mix-blend-mode: multiply;
+    }
+
+    &_images {
+      position: relative;
+      width: 100%;
+      z-index: 2;
+
+      &_gif {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        padding: 0 64px 0 10px;
+
+        picture {
+          padding-bottom: min(88.916vh, calc(722 / 646 * 100%));
+        }
+      }
+
+      &_tree {
+        position: absolute;
+        bottom: -1.389vw;
+        left: 0;
+        width: 19.236vw;
+        z-index: 2;
+
+        picture {
+          padding-bottom: calc(213 / 277 * 100%);
+        }
+      }
+    }
+
+    @include maxW {
+      &_container {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+
+      &_content {
+        &_desc {
+          margin-top: 95px;
+          font-size: 1.3rem;
+          line-height: 2.62;
+        }
+      }
+
+      &_fixed {
+        position: initial;
+      }
+
+      &_inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 30px 20px 25px;
+      }
+
+      &_images {
+        &_title {
+          picture {
+            padding-bottom: calc(162.75 / 374 * 100%);
+          }
+        }
+
+        &_gif {
+          margin-top: 10px;
+          position: initial;
+          padding: 0 6px 0 4px;
+          flex: 1;
+          display: flex;
+
+          picture {
+            flex: 1;
+            padding-bottom: initial;
+          }
+        }
+
+        &_brand {
+          width: 46.377vw;
+          margin: 0 5px 0 auto;
+
+          picture {
+            padding-bottom: calc(20.56 / 192 * 100%);
+          }
+        }
+
+        &_tree {
+          position: fixed;
+          bottom: -3.382vw;
+          left: 13px;
+          width: 39.614vw;
+
+          picture {
+            padding-bottom: calc(125 / 164 * 100%);
+          }
+        }
+      }
+    }
+  }
+
+  // ===== diary =====
+  .diary {
+    &_container {
+      padding-top: 200px;
+      height: 200vh;
+    }
+
+    @include maxW {
+      &_container {
+        padding-top: 150px;
+      }
+    }
+  }
+
+  // ===== timeline =====
+  .timeline {
+    height: 200vh;
+  }
 }
