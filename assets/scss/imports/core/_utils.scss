@@ -1,5 +1,15 @@
 /* Utils
 ------------------------------------------------------------*/
+/* font family */
+.montserrat-medium {
+  font-family: var(--en-fonts);
+  font-weight: 500;
+}
+
+.montserrat-semibold {
+  font-family: var(--en-fonts);
+  font-weight: 600;
+}
 
 /* lazy load */
 img.lazy {

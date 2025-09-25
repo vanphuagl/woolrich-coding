@@ -6,6 +6,10 @@ const eventsTrigger = ["pageshow", "scroll"];
 
 // ===== init =====
 const init = () => {
+  // # gsap
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.clearScrollMemory("manual");
+  ScrollTrigger.refresh();
   // # app height
   appHeight();
   // # lazy load
@@ -16,7 +20,7 @@ const init = () => {
 };
 
 // ===== lenis =====
-window.lenis = new Lenis({
+const lenis = new Lenis({
   duration: 1.0,
   easing: (t) => Math.min(1, 1.001 - Math.pow(1 - t, 2.5)),
   smooth: true,
@@ -28,10 +32,13 @@ window.lenis = new Lenis({
   gestureDirection: "vertical",
 });
 const raf = (t) => {
-  window.lenis.raf(t);
+  lenis.raf(t);
   requestAnimationFrame(raf);
 };
 requestAnimationFrame(raf);
+lenis.on("scroll", () => {
+  ScrollTrigger.update();
+});
 
 // ===== app height =====
 const appHeight = () => {
@@ -50,3 +57,6 @@ window.addEventListener("resize", appHeight);
 
 // ### ===== DOMCONTENTLOADED ===== ###
 window.addEventListener("DOMContentLoaded", init);
+window.addEventListener("pageshow", () => {
+  document.body.classList.remove("fadeout");
+});
